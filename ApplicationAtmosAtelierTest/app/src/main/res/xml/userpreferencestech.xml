@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    android:title="@string/TitreActiviteReglage" xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/ParametreCategorieServeur">
+        <EditTextPreference
+            android:defaultValue="@string/ValeurDefautParametreAdresseServeur"
+            android:title="@string/ParametreAdresseServeur"
+            android:key="PREFKEY_IP_SERVEUR"
+            android:summary="Entrer l'adresse ou le nom d'hôte du serveur SQL"/>
+        <EditTextPreference
+            android:summary="Entrer le port d\'écoute du serveur"
+            android:title="@string/ParametrePortServeur"
+            android:key="PREFKEY_PORT_SERVEUR"
+            android:inputType="number"
+            android:defaultValue="@string/ValeurDefautParametrePortServeur"/>
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/ParametreCategorieRafraichissement">
+        <EditTextPreference
+            android:summary="Entrer la valeur par minutes du rafraichissement des données"
+            android:title="@string/ParametreRafaichissementMinutes"
+            android:key="PREFKEY_USERNAME"
+            android:defaultValue="@string/ValeurDefautParametreRafraichissement"/>
+    </PreferenceCategory>
+</PreferenceScreen>

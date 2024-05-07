@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">ApplicationAtmosphereAtelier</string>
+    <!-- Règlages -->
+    <string name="ParametreAdresseServeur">Adresse serveur</string>
+    <string name="ParametrePortServeur">Port serveur SQL</string>
+    <string name="ParametreRafaichissementMinutes">Rafraichissement des données</string>
+
+
+    <string name="ParametreCategorieServeur">Paramètres d\'adressage du serveur</string>
+    <string name="ParametreCategorieRafraichissement">Rafraichissement des valeurs en minutes</string>
+    <string name="MenuReglages">Réglages</string>
+    <string name="Menuapropos">A propos</string>
+    <string name="TitreActiviteReglage">Réglages du client</string>
+
+    <string name="ValeurDefautParametrePortServeur">80</string>
+    <string name="ValeurDefautParametreAdresseServeur">172.16.40.40</string>
+    <string name="ValeurDefautParametreRafraichissement">2</string>
+    <string  name="MenuInconnu">Menu inconnu</string>
+    <string name="PasDeCle">Pas de clé </string>
+</resources>
