@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements GestionCapteur.Ca
     private TextView textViewValeur;
     private TextView textViewMin;
     private TextView textViewMax;
+    private Switch switchAlarme;
     private GestionCapteur gestionCapteur;
     private ConnexionWebRest connexionWebRest;
 
@@ -66,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements GestionCapteur.Ca
         ListView listeCapteursaffiche = (ListView) findViewById(R.id.listViewCapteurs);
         listeCapteursaffiche.setAdapter(ArrayAdapterPersoCapteurs);
 
-        GestionCapteur gestionCapteur = new GestionCapteur(this, this,connexionWebRest);
+        GestionCapteur gestionCapteur = new GestionCapteur(this,connexionWebRest);
 
 
         //pour exécuter les méthodes automatiquement
@@ -89,6 +90,7 @@ public class MainActivity extends AppCompatActivity implements GestionCapteur.Ca
                                 for (Capteur capteur : listeCapteurs) {
                                     gestionCapteur.DerniereValeur(MainActivity.this, capteur.getSensor());
                                     gestionCapteur.listerCapteursAvecSeuil();
+                                    gestionCapteur.AlarmeActive(capteur.getSensor(), capteur.getActiveAlert());
                                 }
                                 int childCount = listView.getChildCount();
                                 for (int i = 0; i < childCount; i++) {
@@ -299,14 +301,16 @@ public class MainActivity extends AppCompatActivity implements GestionCapteur.Ca
     }
 
 
+
     @Override
     public void SeuilCapteur(List<Capteur> lc) {
+        //utliser la méthode developpé listerCapteursAvecSeuil de gestioncapteur
         // Mettre à jour l'interface utilisateur avec les données de seuil des capteurs
         for (Capteur capteur : lc) {
+            gestionCapteur.listerCapteursAvecSeuil();
             String nomCapteur = capteur.getSensor();
             double seuilMax = capteur.getSeuilMax();
             double seuilMin = capteur.getSeuilMin();
-
             // Mettez à jour les TextView ou tout autre composant de l'interface utilisateur avec ces valeurs
             textViewNom.setText(nomCapteur);
             textViewMax.setText(String.valueOf(seuilMax));
@@ -316,12 +320,25 @@ public class MainActivity extends AppCompatActivity implements GestionCapteur.Ca
 
     @Override
     public void DerniereValeur(Capteur capteur) {
+        //petites choses à revoir ici
         // Mettre à jour l'interface utilisateur avec la dernière valeur du capteur
         String nomCapteur = capteur.getSensor();
-        double derniereValeur = capteur.getValue();
         // Mettez à jour les TextView ou tout autre composant de l'interface utilisateur avec cette valeur
         textViewNom.setText(nomCapteur);
-        textViewValeur.setText(String.valueOf(derniereValeur));
+        textViewValeur.setText(String.valueOf(gestionCapteur.DerniereValeur(this,nomCapteur)));
+    }
+
+
+    //Fonction pour mettre à jour l'état du bouton switch avec gestionCapteur
+    @Override
+    public void EtatAlarme(Capteur capteur){
+        // Récupérer les informations du capteur
+        String nomCapteur = capteur.getSensor();
+        boolean isActive = capteur.getActiveAlert();
+        // Appeler la méthode pour mettre à jour l'état de l'alarme
+        gestionCapteur.AlarmeActive(nomCapteur, isActive);
+        // Mettre à jour l'état du bouton switch dans l'interface utilisateur
+        switchAlarme.setChecked(isActive);
     }
 
     @Override

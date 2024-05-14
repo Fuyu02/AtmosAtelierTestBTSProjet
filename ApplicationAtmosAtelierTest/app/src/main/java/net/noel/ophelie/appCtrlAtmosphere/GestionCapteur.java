@@ -28,15 +28,16 @@ public class GestionCapteur {
     private ConnexionWebRest connexionWebRest;
 
     public interface Callback {
+        //il en manque ??
         void SeuilCapteur(List<Capteur> lc);
         void DerniereValeur(Capteur capteur);
+        void EtatAlarme(Capteur capteur); //pas de méthode qui utlise ça pour callback
 
         void endErreur(String e);
     }
 
-    public GestionCapteur(Context context, Callback callback, ConnexionWebRest connexionWebRest) {
-        this.context = context;
-        this.callback = callback;
+    public GestionCapteur(Context context, ConnexionWebRest connexionWebRest) {
+        this.callback = (Callback) context;
         this.connexionWebRest = connexionWebRest; // Initialisation de connexionWebRest
     }
 
@@ -90,7 +91,7 @@ public class GestionCapteur {
     }
 
     // Méthode pour obtenir les dernières valeurs
-    public void DerniereValeur(Context context, String sensor) {
+    public Object DerniereValeur(Context context, String sensor) {
         String url = "http://" + connexionWebRest.getAdresseIP() + ":" + connexionWebRest.getPort() + "/Projet2024-Controle_Atmosphere_Atelier-API_SERVER/Index.php/lireDerniereValeur?sensor=" + sensor;
 
         RequestQueue requestQueue = Volley.newRequestQueue(context);
@@ -133,11 +134,16 @@ public class GestionCapteur {
         });
 
         requestQueue.add(request);
+        return null;
     }
 
 
-    // Méthode pour activer l'alarme
-    public void activerAlarme(String sensor, boolean activeAlarme) {
+    // Méthode pour activer l'alarme à revoir
+    //ça retourne juste un message de confirmation
+    //pourquoi type void au lieu de type Object ??
+    //pourquoi stringrequest ??
+    //comment manipuler le message ??
+    public void AlarmeActive(String sensor, boolean activeAlarme) {
         String url = "http://"+ connexionWebRest.getAdresseIP() + ":" + connexionWebRest.getPort() +"/Projet2024-Controle_Atmosphere_Atelier-API_SERVER/Index.php/ActiveAlarme?sensor=" + sensor + "&ActiveAlarme=" + (activeAlarme ? "1" : "0");
 
         RequestQueue requestQueue = Volley.newRequestQueue(context);
@@ -149,10 +155,12 @@ public class GestionCapteur {
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             String message = jsonObject.getString("message");
+                            callback.EtatAlarme(response); //trouver ce qu'il faut mettre ici
                             // Gérer la réponse si nécessaire
                         } catch (JSONException e) {
                             e.printStackTrace();
                             // Gérer l'erreur si nécessaire
+                            callback.endErreur("Erreur lors de l'analyse JSON");
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -160,6 +168,7 @@ public class GestionCapteur {
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 // Gérer l'erreur si nécessaire
+                callback.endErreur("Erreur de réseau");
             }
         });
 
