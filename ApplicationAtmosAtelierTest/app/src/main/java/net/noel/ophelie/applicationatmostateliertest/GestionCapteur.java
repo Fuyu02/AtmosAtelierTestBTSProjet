@@ -1,4 +1,4 @@
-package net.noel.ophelie.appCtrlAtmosphere;
+package net.noel.ophelie.applicationatmostateliertest;
 
 import android.content.Context;
 
@@ -7,16 +7,12 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -30,8 +26,8 @@ public class GestionCapteur {
     public interface Callback {
         //il en manque ??
         void SeuilCapteur(List<Capteur> lc);
-        void DerniereValeur(Capteur capteur);
-        void EtatAlarme(Capteur capteur); //pas de méthode qui utlise ça pour callback
+       // void DerniereValeur(Capteur capteur);
+        //void EtatAlarme(Capteur capteur); //pas de méthode qui utlise ça pour callback
 
         void endErreur(String e);
     }
@@ -42,8 +38,8 @@ public class GestionCapteur {
     }
 
     public void listerCapteursAvecSeuil() {
-        String url = "http://" + connexionWebRest.getAdresseIP() + ":" + connexionWebRest.getPort() + "/Projet2024-Controle_Atmosphere_Atelier-API_SERVER/Index.php/lireSeuilsCapteurs";
-
+        //String url = "http://" + connexionWebRest.getAdresseIP() + ":" + connexionWebRest.getPort() + "/Projet2024-Controle_Atmosphere_Atelier-API_SERVER/Index.php/lireSeuilsCapteurs";
+        String url = "http://172.16.40.40/Projet2024-Controle_Atmosphere_Atelier-API_SERVER/Index.php/lireSeuilsCapteurs";
         RequestQueue requestQueue = Volley.newRequestQueue(context);
 
         List<Capteur> capteurs = new ArrayList<>();
@@ -91,9 +87,8 @@ public class GestionCapteur {
     }
 
     // Méthode pour obtenir les dernières valeurs
-    public Object DerniereValeur(Context context, String sensor) {
+   /* public Object DerniereValeur(Context context, String sensor) {
         String url = "http://" + connexionWebRest.getAdresseIP() + ":" + connexionWebRest.getPort() + "/Projet2024-Controle_Atmosphere_Atelier-API_SERVER/Index.php/lireDerniereValeur?sensor=" + sensor;
-
         RequestQueue requestQueue = Volley.newRequestQueue(context);
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
@@ -135,7 +130,7 @@ public class GestionCapteur {
 
         requestQueue.add(request);
         return null;
-    }
+    }*/
 
 
     // Méthode pour activer l'alarme à revoir
@@ -143,7 +138,7 @@ public class GestionCapteur {
     //pourquoi type void au lieu de type Object ??
     //pourquoi stringrequest ??
     //comment manipuler le message ??
-    public void AlarmeActive(String sensor, boolean activeAlarme) {
+    /*public void AlarmeActive(String sensor, boolean activeAlarme) {
         String url = "http://"+ connexionWebRest.getAdresseIP() + ":" + connexionWebRest.getPort() +"/Projet2024-Controle_Atmosphere_Atelier-API_SERVER/Index.php/ActiveAlarme?sensor=" + sensor + "&ActiveAlarme=" + (activeAlarme ? "1" : "0");
 
         RequestQueue requestQueue = Volley.newRequestQueue(context);
@@ -155,6 +150,7 @@ public class GestionCapteur {
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             String message = jsonObject.getString("message");
+
                             callback.EtatAlarme(response); //trouver ce qu'il faut mettre ici
                             // Gérer la réponse si nécessaire
                         } catch (JSONException e) {
@@ -173,6 +169,6 @@ public class GestionCapteur {
         });
 
         requestQueue.add(request);
-    }
+    }*/
 
 }

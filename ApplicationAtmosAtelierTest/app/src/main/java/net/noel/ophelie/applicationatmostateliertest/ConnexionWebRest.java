@@ -1,4 +1,4 @@
-package net.noel.ophelie.appCtrlAtmosphere;
+package net.noel.ophelie.applicationatmostateliertest;
 
 public class ConnexionWebRest {
     private String adresseIP;

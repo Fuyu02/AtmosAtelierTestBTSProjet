@@ -1,4 +1,4 @@
-package net.noel.ophelie.appCtrlAtmosphere;
+package net.noel.ophelie.applicationatmostateliertest;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,14 +13,11 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import net.noel.ophelie.applicationatmosateliertest.R;
-
-import org.chromium.base.Callback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements GestionCapteur.Ca
         ListView listeCapteursaffiche = (ListView) findViewById(R.id.listViewCapteurs);
         listeCapteursaffiche.setAdapter(ArrayAdapterPersoCapteurs);
 
-        GestionCapteur gestionCapteur = new GestionCapteur(this,connexionWebRest);
+       gestionCapteur = new GestionCapteur(this,connexionWebRest);
 
 
         //pour exécuter les méthodes automatiquement
@@ -88,9 +85,9 @@ public class MainActivity extends AppCompatActivity implements GestionCapteur.Ca
                             @Override
                             public void run() {
                                 for (Capteur capteur : listeCapteurs) {
-                                    gestionCapteur.DerniereValeur(MainActivity.this, capteur.getSensor());
+                                    //gestionCapteur.DerniereValeur(MainActivity.this, capteur.getSensor());
                                     gestionCapteur.listerCapteursAvecSeuil();
-                                    gestionCapteur.AlarmeActive(capteur.getSensor(), capteur.getActiveAlert());
+                                    //gestionCapteur.AlarmeActive(capteur.getSensor(), capteur.getActiveAlert());
                                 }
                                 int childCount = listView.getChildCount();
                                 for (int i = 0; i < childCount; i++) {
@@ -239,32 +236,28 @@ public class MainActivity extends AppCompatActivity implements GestionCapteur.Ca
                 .show();
     }
 
+
+    //
+
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        switch (item.getItemId())
-        {
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
             case MENU_REGLAGES:
-                try
-                {
+                try {
                     Class<SetPreferencesFragmentActivity> classe =
                             SetPreferencesFragmentActivity.class;
                     Intent intention = new Intent(this, classe);
                     startActivityForResult(intention, CODE_REQUETE_CONFIGURER);
-                    break;
-                }
-                catch (Exception e)
-                {
+                } catch (Exception e) {
                     AfficheAlert(e.getMessage(), "Exception");
                     return false;
                 }
+                return true;
             default:
                 AfficheAlert(getResources().getString(R.string.MenuInconnu), "Erreur");
                 return false;
         }
-        return true;
     }
-    //
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent
             data){
@@ -286,14 +279,13 @@ public class MainActivity extends AppCompatActivity implements GestionCapteur.Ca
     //
     private void updateAttributsFromPreferences() {
         try {
-            //mise à jour des paramètres
             SharedPreferences shp =
                     PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             this.ip = shp.getString(PreferencesFragments.KEY_IPSERVEUR,
                     getResources().getString(R.string.ValeurDefautParametreAdresseServeur));
             this.port = shp.getString(PreferencesFragments.KEY_PORTSERVEUR,
                     getResources().getString(R.string.ValeurDefautParametrePortServeur));
-            this.rafraichissement = shp.getString(PreferencesFragments.KEY_USERNAME,
+            this.rafraichissement = shp.getString(PreferencesFragments.KEY_RAFRAICHISSEMENT,
                     getResources().getString(R.string.ValeurDefautParametreRafraichissement));
         } catch (Exception e) {
             AfficheAlert(e.getMessage(), "Exception updateAttributs");
@@ -301,24 +293,19 @@ public class MainActivity extends AppCompatActivity implements GestionCapteur.Ca
     }
 
 
-
     @Override
     public void SeuilCapteur(List<Capteur> lc) {
-        //utliser la méthode developpé listerCapteursAvecSeuil de gestioncapteur
-        // Mettre à jour l'interface utilisateur avec les données de seuil des capteurs
         for (Capteur capteur : lc) {
             gestionCapteur.listerCapteursAvecSeuil();
-            String nomCapteur = capteur.getSensor();
-            double seuilMax = capteur.getSeuilMax();
-            double seuilMin = capteur.getSeuilMin();
-            // Mettez à jour les TextView ou tout autre composant de l'interface utilisateur avec ces valeurs
-            textViewNom.setText(nomCapteur);
-            textViewMax.setText(String.valueOf(seuilMax));
-            textViewMin.setText(String.valueOf(seuilMin));
+            // Mettez à jour les TextView ou tout autre composant de l'interface utilisateur avec les valeurs
+            //souhaitées
+            textViewNom.setText(capteur.getSensor());
+            textViewMax.setText(String.valueOf(capteur.getSeuilMax()));
+            textViewMin.setText(String.valueOf(capteur.getSeuilMin()));
         }
     }
 
-    @Override
+    /*@Override
     public void DerniereValeur(Capteur capteur) {
         //petites choses à revoir ici
         // Mettre à jour l'interface utilisateur avec la dernière valeur du capteur
@@ -326,12 +313,12 @@ public class MainActivity extends AppCompatActivity implements GestionCapteur.Ca
         // Mettez à jour les TextView ou tout autre composant de l'interface utilisateur avec cette valeur
         textViewNom.setText(nomCapteur);
         textViewValeur.setText(String.valueOf(gestionCapteur.DerniereValeur(this,nomCapteur)));
-    }
+    }*/
 
-
+/*
     //Fonction pour mettre à jour l'état du bouton switch avec gestionCapteur
     @Override
-    public void EtatAlarme(Capteur capteur){
+    public void EtatAlarme(Capteur capteu){
         // Récupérer les informations du capteur
         String nomCapteur = capteur.getSensor();
         boolean isActive = capteur.getActiveAlert();
@@ -339,7 +326,7 @@ public class MainActivity extends AppCompatActivity implements GestionCapteur.Ca
         gestionCapteur.AlarmeActive(nomCapteur, isActive);
         // Mettre à jour l'état du bouton switch dans l'interface utilisateur
         switchAlarme.setChecked(isActive);
-    }
+    }*/
 
     @Override
     public void endErreur(String e) {

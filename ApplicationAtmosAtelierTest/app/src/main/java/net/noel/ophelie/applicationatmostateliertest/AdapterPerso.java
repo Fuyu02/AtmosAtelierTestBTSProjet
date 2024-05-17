@@ -1,4 +1,4 @@
-package net.noel.ophelie.appCtrlAtmosphere;
+package net.noel.ophelie.applicationatmostateliertest;
 
 import android.content.Context;
 import android.view.LayoutInflater;
